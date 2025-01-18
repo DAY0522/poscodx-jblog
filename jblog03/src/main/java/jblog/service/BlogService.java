@@ -44,7 +44,6 @@ public class BlogService {
 
         // 해당하는 카테고리가 없는 경우
         CategoryVo currentCategory = categoryService.getCategory(categoryId);
-        System.out.println("currentCategory: " + currentCategory);
         if (currentCategory == null || !currentCategory.getBlogId().equals(blogId)) {
             // 해당하는 카테고리가 없거나, 현재 유저의 카테고리가 아닌 경우
             categoryId = categoryService.getLastCategoryByBlogId(blogId).getId();

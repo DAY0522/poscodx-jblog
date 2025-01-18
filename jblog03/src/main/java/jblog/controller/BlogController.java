@@ -14,7 +14,7 @@ import java.util.Optional;
 
 
 @Controller
-@RequestMapping("/{id:(?!assets).*}")
+@RequestMapping("/{blogId:(?!assets).*}")
 // URL에서 id 값을 매핑하려고 할 때,
 // /assets/images/pic.jpg와 같은 URL은 정적 리소스를 제공하는 컨트롤러로 가도록 하고, 동적 컨텐츠와 혼동되지 않도록 처리
 public class BlogController {
@@ -36,11 +36,12 @@ public class BlogController {
 
     @RequestMapping({"", "/{path1}", "/{path1}/{path2}"})
     public String main(
-            @PathVariable("id") String id,
+            @PathVariable("blogId") String id,
             @PathVariable("path1") Optional<Long> path1,
             @PathVariable("path2") Optional<Long> path2,
             Model model) {
 
+        System.out.println("블로그 메인 화면");
         Long categoryId = 0L;
         Long postId = 0L;
 
@@ -71,14 +72,19 @@ public class BlogController {
     // @Auth 추천
     @Auth(role="ADMIN")
     @GetMapping("/admin")
-    public String adminDefault(@PathVariable("id") String id, Model model) {
-        model.addAttribute("blog", blogService.getBlog(id));
+    public String adminDefault(@PathVariable("blogId") String id, Model model) {
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
+        BlogVo blog = blogService.getBlog(id);
+        System.out.println("blog: " + blog);
+
+        model.addAttribute("blog", blog);
+        System.out.println("ADMIN 페이지");
         return "blog/admin-default";
     }
 
     @Auth(role="ADMIN")
     @PostMapping("/admin/modify")
-    public String modifyBlogInfo(@PathVariable("id") String id, BlogVo blogVo, @RequestParam("file") MultipartFile file) {
+    public String modifyBlogInfo(@PathVariable("blogId") String id, BlogVo blogVo, @RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) { // null이 아닌 경우에만 프로필 update
             blogVo.setProfile(fileUploadService.restore(file));
         }
@@ -89,7 +95,7 @@ public class BlogController {
 
     @Auth(role="ADMIN")
     @GetMapping("/admin/category")
-    public String adminCategory(@PathVariable("id") String id, Model model) {
+    public String adminCategory(@PathVariable("blogId") String id, Model model) {
         model.addAttribute("blog", blogService.getBlog(id));
         model.addAttribute("category", categoryService.getCountCategoryByUserId(id));
         return "blog/admin-category";
@@ -97,14 +103,14 @@ public class BlogController {
 
     @Auth(role="ADMIN")
     @GetMapping("/admin/category/delete/{categoryId}")
-    public String deleteCategory(@PathVariable("id") String id, @PathVariable("categoryId") Long categoryId) {
+    public String deleteCategory(@PathVariable("blogId") String id, @PathVariable("categoryId") Long categoryId) {
         categoryService.delete(categoryId);
         return "redirect:/" + id + "/admin/category";
     }
 
     @Auth(role="ADMIN")
     @PostMapping("/admin/category/write")
-    public String createCategory(@PathVariable("id") String id, CategoryVo categoryVo) {
+    public String createCategory(@PathVariable("blogId") String id, CategoryVo categoryVo) {
         categoryVo.setBlogId(id);
         categoryService.createCategory(categoryVo);
         return "redirect:/" + id + "/admin/category";
@@ -112,7 +118,7 @@ public class BlogController {
 
     @Auth(role="ADMIN")
     @GetMapping("/admin/write")
-    public String adminWrite(@PathVariable("id") String id, Model model) {
+    public String adminWrite(@PathVariable("blogId") String id, Model model) {
         model.addAttribute("blog", blogService.getBlog(id));
         model.addAttribute("category", categoryService.getCategoryList(id));
         return "blog/admin-write";
@@ -120,7 +126,7 @@ public class BlogController {
 
     @Auth(role="ADMIN")
     @PostMapping("/admin/write")
-    public String adminWrite(PostVo postVo, @PathVariable("id") String id) {
+    public String adminWrite(@PathVariable("blogId") String id, PostVo postVo) {
         postService.createPost(postVo);
         return "redirect:/" + id + "/" + postVo.getCategoryId();
     }

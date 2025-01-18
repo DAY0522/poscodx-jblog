@@ -36,7 +36,7 @@
             </div>
             <ul class="blog-list">
                 <c:forEach items="${map.postList}" var="post">
-                    <li><a href="${pageContext.request.contextPath}/${id}/${post.categoryId}/${post.id}">${post.title}</a> <span>${post.regDate}</span></li>
+                    <li><a href="${pageContext.request.contextPath}/${blogId}/${post.categoryId}/${post.id}">${post.title}</a> <span>${post.regDate}</span></li>
                 </c:forEach>
             </ul>
         </div>
@@ -52,7 +52,7 @@
         <h2>카테고리</h2>
         <ul>
             <c:forEach items="${map.category}" var="category">
-                <li><a href="${pageContext.request.contextPath}/${id}/${category.id}">${category.name}</a></li>
+                <li><a href="${pageContext.request.contextPath}/${blogId}/${category.id}">${category.name}</a></li>
             </c:forEach>
         </ul>
     </div>

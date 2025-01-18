@@ -46,14 +46,22 @@ public class AuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        String name = authUser.getName();
+        String id = authUser.getId();
+
+        System.out.println("!!!!!!!!!!!!!!");
+
+        System.out.println(role);
 
         // 현재 들어간 블로그 id 추출
         String blogId = request.getRequestURI().split("/")[2];
-        if ("ADMIN".equals(role) && !name.equals(blogId)) {
+        System.out.println(blogId);
+        System.out.println(id);
+        if ("ADMIN".equals(role) && !id.equals(blogId)) {
             response.sendRedirect(request.getContextPath() + "/" + blogId);
             return false;
         }
+
+        System.out.println("???????????????");
 
         return true;
     }
