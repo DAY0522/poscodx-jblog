@@ -73,12 +73,9 @@ public class BlogController {
     @Auth(role="ADMIN")
     @GetMapping("/admin")
     public String adminDefault(@PathVariable("blogId") String id, Model model) {
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!");
         BlogVo blog = blogService.getBlog(id);
-        System.out.println("blog: " + blog);
 
         model.addAttribute("blog", blog);
-        System.out.println("ADMIN 페이지");
         return "blog/admin-default";
     }
 

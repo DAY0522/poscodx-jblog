@@ -25,7 +25,7 @@ public class BlogService {
     }
 
     public void createBlog(UserVo userVo) {
-        BlogVo blogVo = new BlogVo(userVo.getId(), userVo.getName() + "님의 블로그", "/assets/upload-images/default.jpg");
+        BlogVo blogVo = new BlogVo(userVo.getId(), userVo.getName() + "님의 블로그", "/assets/images/default.jpg");
         blogRepository.insert(blogVo);
 
         CategoryVo categoryVo = new CategoryVo(null, blogVo.getId(), "기본 카테고리", "기본 카테고리입니다.");
